@@ -73,4 +73,35 @@ class Hand:
 		"""
 
 		for card in self.getCards():
-			print "{0} of {1}".format(card.getName(), card.getSuit())
+			print("{0} of {1}".format(card.getName(), card.getSuit()))
+
+	def pprint(self):
+		"""
+		Pretty print cards in ASCII art
+		"""
+		# Some code stolen from http://stackoverflow.com/questions/983699/initialise-a-list-to-a-specific-length-in-python
+		
+		# Suit lookup in unicode range
+		suitLookup = {
+			"Diamond": chr(0x2666),
+			"Spade": chr(0x2660),
+			"Heart": chr(0x2665),
+			"Club": chr(0x2663)}
+		# Initialize the lines
+		lines = [""] * 9
+		
+		# Loop through all the hards in your hand
+		for card in self.getCards():
+			# Format the cards line by line so that they line up horizontally
+			lines[0] += ('┌─────────┐ ')
+			lines[1] += ('│{0:<5}    │ '.format(card.getName()))
+			lines[2] += ('│         │ ')
+			lines[3] += ('│         │ ')
+			lines[4] += ('│    {}    │ '.format(suitLookup[card.getSuit()]))
+			lines[5] += ('│         │ ')
+			lines[6] += ('│         │ ')
+			lines[7] += ('│ {0:>8}│ '.format(card.getName()))
+			lines[8] += ('└─────────┘ ')
+		
+		[print(line) for line in lines]
+
