@@ -1,0 +1,2 @@
+#!/bin/bash
+for upCard in 2 3 4 5 6 7 8 9 10 A; do for userTotal in 16; do for playerAction in "Hit" "Stand"; do for oneHit in 1 0; do python simulateIndividualBlackJackProbability.py 8 $upCard $userTotal 200000 $playerAction 1 1 $oneHit | tee -a output.txt ; done; done; done; done

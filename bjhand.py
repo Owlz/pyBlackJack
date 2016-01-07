@@ -1,0 +1,76 @@
+def isCard(item):
+	return item.__class__.__name__ == "Card"
+
+class Hand:
+	"""
+	Defines a blackjack hand
+	"""
+
+	def __init__(self, card1 = None, card2 = None):
+		"""
+		Initialize the blackjack hand
+		"""
+
+		# What cards are in the hand
+		self.cards = []
+
+		# If we are giving initial cards, add them
+		if card1 != None:
+			# These should be cards
+			assert isCard(card1)
+			self.cards.append(card1)
+
+		if card2 != None:
+			assert isCard(card2)
+			self.cards.append(card2)
+
+		return
+
+	def addCard(self, card):
+		"""
+		Add a card to the hand
+		"""
+		assert isCard(card)
+
+		self.cards.append(card)
+
+	def getCards(self):
+		"""
+		Return array of cards in the hand
+		"""
+
+		# Return a copy
+		return self.cards[:]
+
+
+	def getValue(self):
+		"""
+		Determine hand total value
+		Returns as an array (i.e.: [5] or [7,17])
+		"""
+
+		total = [0]
+
+		for card in self.getCards():
+			temp = []
+			for value in card.getValue():
+				for t in total:
+					temp.append(t + value)
+
+			# Remove duplicates
+			temp = sorted(list(set(temp)))
+
+			# Remove entries greater than 21
+			temp = [x for x in temp if x <= 21]
+	
+			total = temp
+
+		return total
+
+	def printCards(self):
+		"""
+		Prints out description of what cards are in the hand
+		"""
+
+		for card in self.getCards():
+			print "{0} of {1}".format(card.getName(), card.getSuit())
