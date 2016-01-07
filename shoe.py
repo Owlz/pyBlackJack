@@ -62,5 +62,5 @@ class Shoe:
 		"""
 
 		for c in self.getCards():
-			print "{0} of {1}".format(c.getName(), c.getSuit())
+			print("{0} of {1}".format(c.getName(), c.getSuit()))
 

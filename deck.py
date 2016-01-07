@@ -14,7 +14,7 @@ class Deck:
 		# Keeps track of what cards are in the deck
 		self.cards = []
 
-		for value in range(2,11) + ["J","Q","K","A"]:
+		for value in list(range(2,11)) + ["J","Q","K","A"]:
 			for suit in ["Spade","Diamond","Heart","Club"]:
 				self.cards.append(Card(str(value),suit))
 
