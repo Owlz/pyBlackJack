@@ -3,6 +3,7 @@
 import configparser
 import string
 from prettytable import PrettyTable
+from bjDealer import Dealer
 
 def printBanner():
 	"""
@@ -82,3 +83,6 @@ printBanner()
 houseRules = selectHouseRules()
 
 printHouseRules(houseRules)
+
+# Init our dealer
+dealer = Dealer(houseRules)
