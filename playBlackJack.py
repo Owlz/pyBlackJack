@@ -2,6 +2,7 @@
 
 import configparser
 import string
+from prettytable import PrettyTable
 
 def printBanner():
 	"""
@@ -15,6 +16,27 @@ def printBanner():
 `------'`------'`------'`------'`------'`------'`------'`------'`------'`------'`------'
 
 """)
+
+def printHouseRules(houseRules):
+	"""
+	Input:
+		Rules object as defined from selectHouseRules call
+	Action:
+		Display the rules that are going to be in effect
+	Returns:
+		Nothing
+	"""
+	
+	t = PrettyTable(["Name", "Value"])
+	
+	print("Number of decks per shoe:\t\t{0}".format(houseRules["number_of_decks"]))
+	print("Dealer hits soft 17?:\t\t\t{0}".format(houseRules["hit_soft_17"]))
+	print("Double allowed after split?:\t\t{0}".format(houseRules["double_after_split"]))
+	print("Double allowed on what types of hands?: {0}".format(houseRules["double_on"]))
+	print("Total number of hands allowed:\t\t{0}".format(houseRules["total_hands"]))
+	print("Can you re-split Aces?:\t\t\t{0}".format(houseRules["resplit_ace"]))
+	print("BlackJack pays:\t\t\t\t{0}".format(houseRules["blackjack_pays"]))
+	
 
 def selectHouseRules():
 	"""
@@ -59,4 +81,4 @@ printBanner()
 # Get house rules to play by
 houseRules = selectHouseRules()
 
-
+printHouseRules(houseRules)
