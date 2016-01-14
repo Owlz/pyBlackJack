@@ -4,6 +4,8 @@ import configparser
 import string
 from prettytable import PrettyTable
 from bjDealer import Dealer
+from bjPlayer import Player
+from bjHand import Hand
 
 def printBanner():
 	"""
@@ -37,6 +39,7 @@ def printHouseRules(houseRules):
 	print("Total number of hands allowed:\t\t{0}".format(houseRules["total_hands"]))
 	print("Can you re-split Aces?:\t\t\t{0}".format(houseRules["resplit_ace"]))
 	print("BlackJack pays:\t\t\t\t{0}".format(houseRules["blackjack_pays"]))
+	print("Penetration:\t\t\t\t{0}\n".format(houseRules["penetration"]))
 	
 
 def selectHouseRules():
@@ -86,3 +89,11 @@ printHouseRules(houseRules)
 
 # Init our dealer
 dealer = Dealer(houseRules)
+
+# Give the player a hand
+player = Hand()
+
+dealer.dealCardToHand(player,numCards=2)
+
+player.pprint()
+

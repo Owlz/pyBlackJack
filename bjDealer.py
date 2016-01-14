@@ -1,3 +1,5 @@
+from bjShoe import Shoe
+
 class Dealer:
 	"""
 	Class acts to abstract the things that a dealer would do
@@ -57,3 +59,24 @@ class Dealer:
 		self.resplitAces = self.asciiToBool(houseRules["resplit_ace"])
 		
 		self.blackJackPays = self.blackJackPaysToInt(houseRules["blackjack_pays"])
+		
+		self.penetration = float(houseRules["penetration"])
+		
+		# Init a new Shoe while we're at it
+		self.shoe = Shoe(self.numDecksPerShoe)
+		self.shoe.shuffle()
+
+	def dealCardToHand(self,hand,numCards=1):
+		"""
+		Input:
+			hand = Hand object that we should deal to
+			(optional) numCards = integer number of cards to deal. 2 would be used to deal a new hand out.
+		Action:
+			Pops a card from the top of shoe stack and adds it to the hand object
+		Return:
+			Nothing. The object is mutable and changed in place to save memory and increase speed.
+		"""
+		
+		# Bastardizing this a little to quickly deal any number of cards out
+		for x in range(numCards):
+			hand.addCard(self.shoe.dealCard())
