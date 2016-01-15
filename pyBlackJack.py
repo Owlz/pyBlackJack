@@ -13,6 +13,8 @@ def printBanner():
 	"""
 	Print out "pyBlackJack" in ASCII art characters
 	"""
+	os.system('cls' if os.name == 'nt' else 'clear')
+	
 	print(""".------..------..------..------..------..------..------..------..------..------..------.
 |P.--. ||Y.--. ||B.--. ||L.--. ||A.--. ||C.--. ||K.--. ||J.--. ||A.--. ||C.--. ||K.--. |
 | :/\: || (\/) || :(): || :/\: || (\/) || :/\: || :/\: || :(): || (\/) || :/\: || :/\: |
@@ -81,10 +83,11 @@ def selectHouseRules():
 
 	return ruleSets[list(ruleSets)[int(i,10)]]
 
-def drawAsciiTable(table):
+def drawAsciiTable(table,showDealerCard=False):
 	"""
 	Input:
 		table = Table object
+		showDealerCard = Should we show the dealer's whole hand
 	Action:
 		Draw out ASCII interface
 	Returns:
@@ -93,13 +96,17 @@ def drawAsciiTable(table):
 	
 	print("Dealer's Hand")
 	print("-------------")
-	table.getDealer().getHand().pprint(isDealer=True)
+	table.getDealer().getHand().pprint(isDealer=(not showDealerCard))
 	
 	for player in table.getPlayers():
 		h = 1
+		print("")
+		heading = "{0} (${1})".format(player.name,player.money)
+		heading += "\n" + "-"*len(heading)
+		print(heading)
 		for hand in player.getHands():
 			print("")
-			heading = "{0}'s Hand {1}".format(player.name,h)
+			heading = "Hand {0}".format(h)
 			heading += "\n" + "-"*len(heading)
 			print(heading)
 			h += 1
@@ -141,6 +148,14 @@ table.addDealer(dealer)
 player.addHand()
 
 # Deal to the table
-dealer.dealHandsToTable(table)
+insurance, dealerBlackJack = dealer.dealHandsToTable(table)
 
-drawAsciiTable(table)
+drawAsciiTable(table,showDealerCard=False)
+
+if insurance:
+	print("Insurance?")
+
+if dealerBlackJack:
+	print("Dealer Has BlackJack")
+	drawAsciiTable(table,showDealerCard=True)
+

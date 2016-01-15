@@ -21,7 +21,7 @@ class Player:
 		"""
 
 		# How much money does this player have
-		self.money = money
+		self.money = float(money)
 
 		# If no strategy file selected, assume human
 		if strategy == None:

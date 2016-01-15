@@ -93,7 +93,9 @@ class Dealer(Player):
 		Action:
 			Deals a full hand to each player at the table (one at a time as you would in a Casino
 		Returns:
-			Nothing
+			(insurance, dealerBlackJack)
+			insurance == Do we need to ask players for insurance (meaning, Dealer is showing an Ace)
+			dealerBlackJack == dealer has BlackJack
 		"""
 		
 		# Need to do this twice because everyone gets 2 cards
@@ -104,3 +106,13 @@ class Dealer(Player):
 			
 			# Don't forget our own hand!
 			self.dealCardToHand(self.getHand())
+		
+		# Check for blackjacks and insurance stuff here
+		if self.getHand().getCards()[0].getName() == "A":
+			insurance = True
+		else:
+			insurance = False
+		
+		# Check for dealer blackjack
+	
+		return insurance, self.getHand().isBlackJack()

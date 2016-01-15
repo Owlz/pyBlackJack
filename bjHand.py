@@ -122,4 +122,21 @@ class Hand:
 
 		
 		[print(line) for line in lines]
-
+	
+	def isBlackJack(self):
+		"""
+		Input:
+			Nothing
+		Action:
+			Determine if this hand is blackjack or not
+		Return:
+			True if it is blackjack, False otherwise
+		"""
+		
+		cards = self.getCards()
+		
+		# If we have a total of 21 in just 2 cards, this is BlackJack
+		if len(cards) == 2 and self.getValue()[-1] == 21:
+			return True
+		
+		return False
