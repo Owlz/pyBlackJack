@@ -75,9 +75,10 @@ class Hand:
 		for card in self.getCards():
 			print("{0} of {1}".format(card.getName(), card.getSuit()))
 
-	def pprint(self):
+	def pprint(self,isDealer=False):
 		"""
 		Pretty print cards in ASCII art
+		If it's the dealer's hand, hide the second card
 		"""
 		# Some code stolen from http://stackoverflow.com/questions/983699/initialise-a-list-to-a-specific-length-in-python
 		
@@ -92,6 +93,10 @@ class Hand:
 		
 		# Loop through all the hards in your hand
 		for card in self.getCards():
+			# If we're printing the dealer's hand, don't show the second card
+			if isDealer == True and self.getCards().index(card) == 1:
+				continue
+
 			# Format the cards line by line so that they line up horizontally
 			lines[0] += ('┌─────────┐ ')
 			lines[1] += ('│{0:<5}    │ '.format(card.getName()))
@@ -102,6 +107,19 @@ class Hand:
 			lines[6] += ('│         │ ')
 			lines[7] += ('│ {0:>8}│ '.format(card.getName()))
 			lines[8] += ('└─────────┘ ')
+		
+		# If it's the dealer, hide the second card
+		if isDealer:
+			lines[0] += ('┌─────────┐ ')
+			lines[1] += ('│#########│ ')
+			lines[2] += ('│#########│ ')
+			lines[3] += ('│#########│ ')
+			lines[4] += ('│#########│ '.format(suitLookup[card.getSuit()]))
+			lines[5] += ('│#########│ ')
+			lines[6] += ('│#########│ ')
+			lines[7] += ('│#########│'.format(card.getName()))
+			lines[8] += ('└─────────┘ ')
+
 		
 		[print(line) for line in lines]
 

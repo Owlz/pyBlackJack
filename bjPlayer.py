@@ -1,3 +1,5 @@
+from bjHand import Hand
+
 def ofType(item, type):
 	return item.__class__.__name__ == type
 
@@ -7,20 +9,31 @@ class Player:
 	This class defines a blackjack player. Each blackjack player can have one or more hands.
 	"""
 
-	def __init__(self, money, strategy):
+	def __init__(self, money, strategy=None,name=None):
 		"""
 		Initialize the player. No hands initially.
 		Class attributes are:
 		  - money -- float value of money the player has
 		  - strategy -- strategy the player wants to use based on file
+				if no strategy selected, assume this is a human
 		  - hands -- Initially a blank list that will eventually contain Hand objects
+		  - name -- Ascii name used for drawing user interface.
 		"""
 
 		# How much money does this player have
 		self.money = money
 
-		# Import this person's strategy
-		self.strategy = __import__(strategy).strategy
+		# If no strategy file selected, assume human
+		if strategy == None:
+			self.isInteractive = True
+		
+		else:
+			# Import this person's strategy
+			self.strategy = __import__(strategy).strategy
+			self.isInteractive = False
+		
+		# Save our name
+		self.name = name
 
 		# Start up our hands spots
 		self.hands = []
@@ -55,3 +68,14 @@ class Player:
 			Pointer to hand
 		"""
 		return self.hands[index]
+	
+	def getHands(self):
+		"""
+		Input:
+			None
+		Action:
+			Get list of hands for player
+		Returns:
+			List of hands for player
+		"""
+		return self.hands

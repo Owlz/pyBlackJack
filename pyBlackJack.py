@@ -6,6 +6,8 @@ from prettytable import PrettyTable
 from bjDealer import Dealer
 from bjPlayer import Player
 from bjHand import Hand
+from bjTable import Table
+import os
 
 def printBanner():
 	"""
@@ -78,7 +80,32 @@ def selectHouseRules():
 		exit(0)
 
 	return ruleSets[list(ruleSets)[int(i,10)]]
+
+def drawAsciiTable(table):
+	"""
+	Input:
+		table = Table object
+	Action:
+		Draw out ASCII interface
+	Returns:
+		Nothing
+	"""
 	
+	print("Dealer's Hand")
+	print("-------------")
+	table.getDealer().getHand().pprint(isDealer=True)
+	
+	for player in table.getPlayers():
+		h = 1
+		for hand in player.getHands():
+			print("")
+			heading = "{0}'s Hand {1}".format(player.name,h)
+			heading += "\n" + "-"*len(heading)
+			print(heading)
+			h += 1
+			table.getPlayers()[0].getHand().pprint()
+	
+
 # Welcome banner
 printBanner()
 
@@ -87,13 +114,33 @@ houseRules = selectHouseRules()
 
 printHouseRules(houseRules)
 
+name = input("What's your name?: ")
+money = input("How much money to start with?: ")
+
+player = Player(money=money,name=name)
+
+# Clear the screen
+os.system('cls' if os.name == 'nt' else 'clear')
+
+# Init the table
+table = Table()
+
+# Add the player to the table
+table.addPlayer(player)
+
 # Init our dealer
 dealer = Dealer(houseRules)
 
+# Give the dealer a hand
+dealer.addHand()
+
+# Add him to the table
+table.addDealer(dealer)
+
 # Give the player a hand
-player = Hand()
+player.addHand()
 
-dealer.dealCardToHand(player,numCards=2)
+# Deal to the table
+dealer.dealHandsToTable(table)
 
-player.pprint()
-
+drawAsciiTable(table)

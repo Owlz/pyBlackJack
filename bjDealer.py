@@ -1,8 +1,10 @@
 from bjShoe import Shoe
+from bjPlayer import Player
 
-class Dealer:
+class Dealer(Player):
 	"""
 	Class acts to abstract the things that a dealer would do
+	We're extending Player as Dealers are a subset of players
 	"""
 	
 	def asciiToBool(self,x):
@@ -65,6 +67,9 @@ class Dealer:
 		# Init a new Shoe while we're at it
 		self.shoe = Shoe(self.numDecksPerShoe)
 		self.shoe.shuffle()
+		
+		# Give ourself a hands list
+		self.hands = []
 
 	def dealCardToHand(self,hand,numCards=1):
 		"""
@@ -80,3 +85,22 @@ class Dealer:
 		# Bastardizing this a little to quickly deal any number of cards out
 		for x in range(numCards):
 			hand.addCard(self.shoe.dealCard())
+	
+	def dealHandsToTable(self,table):
+		"""
+		Input:
+			table == Table object
+		Action:
+			Deals a full hand to each player at the table (one at a time as you would in a Casino
+		Returns:
+			Nothing
+		"""
+		
+		# Need to do this twice because everyone gets 2 cards
+		for x in range(2):	
+			# Loop through all the players
+			for player in table.getPlayers():
+				self.dealCardToHand(player.getHand())
+			
+			# Don't forget our own hand!
+			self.dealCardToHand(self.getHand())
