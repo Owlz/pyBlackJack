@@ -9,11 +9,18 @@ from bjHand import Hand
 from bjTable import Table
 import os
 
+def clearScreen():
+	"""
+	Simple function to clear the screen.
+	"""
+	os.system('cls' if os.name == 'nt' else 'clear')
+
+
 def printBanner():
 	"""
 	Print out "pyBlackJack" in ASCII art characters
 	"""
-	os.system('cls' if os.name == 'nt' else 'clear')
+	clearScreen()
 	
 	print(""".------..------..------..------..------..------..------..------..------..------..------.
 |P.--. ||Y.--. ||B.--. ||L.--. ||A.--. ||C.--. ||K.--. ||J.--. ||A.--. ||C.--. ||K.--. |
@@ -127,7 +134,7 @@ money = input("How much money to start with?: ")
 player = Player(money=money,name=name)
 
 # Clear the screen
-os.system('cls' if os.name == 'nt' else 'clear')
+clearScreen()
 
 # Init the table
 table = Table()
@@ -158,4 +165,5 @@ if insurance:
 if dealerBlackJack:
 	print("Dealer Has BlackJack")
 	drawAsciiTable(table,showDealerCard=True)
+
 

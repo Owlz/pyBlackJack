@@ -17,6 +17,7 @@ class Player:
 		  - strategy -- strategy the player wants to use based on file
 				if no strategy selected, assume this is a human
 		  - hands -- Initially a blank list that will eventually contain Hand objects
+		  - bets -- List of integer bet values that corresponds to the same index in hands list
 		  - name -- Ascii name used for drawing user interface.
 		"""
 
@@ -37,6 +38,9 @@ class Player:
 
 		# Start up our hands spots
 		self.hands = []
+		
+		# Start up bets list
+		self.bets = []
 
 	def addHand(self, hand=None):
 		"""
