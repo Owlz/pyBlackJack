@@ -41,7 +41,19 @@ class Player:
 		
 		# Start up bets list
 		self.bets = []
-
+	
+	def isHuman(self):
+		"""
+		Input:
+			Nothing
+		Action:
+			Checks if this player is human.
+		Returns:
+			True if this player is interactive, False otherwise.
+		"""
+		# Keeping this as a method in case I change how I do things later.
+		return self.isInteractive
+	
 	def addHand(self, hand=None):
 		"""
 		Input:
