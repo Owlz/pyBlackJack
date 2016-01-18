@@ -101,6 +101,8 @@ def drawAsciiTable(table,showDealerCard=False):
 		Nothing
 	"""
 	
+	clearScreen()
+	
 	print("Dealer's Hand")
 	print("-------------")
 	table.getDealer().getHand().pprint(isDealer=(not showDealerCard))
@@ -133,9 +135,6 @@ name = input("What's your name?: ")
 money = input("How much money to start with?: ")
 
 player = Player(money=money,name=name)
-
-# Clear the screen
-clearScreen()
 
 # Init the table
 table = Table()
@@ -170,3 +169,4 @@ if dealerBlackJack:
 	print("Dealer Has BlackJack")
 	drawAsciiTable(table,showDealerCard=True)
 
+print(dealer.allowedHandActions(player.getHand(),player))

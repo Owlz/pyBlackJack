@@ -71,6 +71,42 @@ class Dealer(Player):
 		# Give ourself a hands list
 		self.hands = []
 
+	def allowedHandActions(self,hand,player):
+		"""
+		Input:
+			hand == Hand class instance
+			player == Player class instance
+		Action:
+			Determines valid actions that the player can take with the given hand
+		Returns:
+			Set of allowed actions. Possible actions include "hit","stand","double","split","surrender"
+		"""
+		
+		# TODO: Double after split
+		
+		# TODO: doubleOn
+		
+		# TODO: totalHandsAllowed
+		
+		# TODO: resplitAces
+		
+		actions = {"hit","stand"}
+		
+		# Grab the cards
+		cards = hand.getCards()
+		
+		# If this is our first two, we have more options
+		if len(cards) == 2:
+			# We can double any two first cards
+			actions = actions.union({"double"})
+			
+			# We can split any first two cards that are the same
+			if cards[0].getName() == cards[1].getName():
+				actions = actions.union({"split"})
+		
+		return actions
+
+
 	def dealCardToHand(self,hand,numCards=1):
 		"""
 		Input:

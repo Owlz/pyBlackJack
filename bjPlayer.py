@@ -163,6 +163,10 @@ class Player:
 		if self.getMoney() < amount:
 			raise Exception("You're trying to bet more than you have! I really need to handle this case better.")
 		
+		# Are we doing silly tricks?
+		if amount < 0:
+			raise Exception("Please don't bet negative values :-)")
+		
 		# Add it to the bet	
 		self.bets.append(amount)
 		
