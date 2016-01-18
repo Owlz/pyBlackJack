@@ -113,7 +113,7 @@ def drawAsciiTable(table,showDealerCard=False):
 		print(heading)
 		for hand in player.getHands():
 			print("")
-			heading = "Hand {0}".format(h)
+			heading = "Hand {0} (${1})".format(h,player.getBets()[player.getHands().index(hand)])
 			heading += "\n" + "-"*len(heading)
 			print(heading)
 			h += 1
@@ -155,6 +155,9 @@ table.addDealer(dealer)
 # Give the player a hand
 player.addHand()
 
+# Get the wager
+table.placeBets()
+
 # Deal to the table
 insurance, dealerBlackJack = dealer.dealHandsToTable(table)
 
@@ -166,5 +169,4 @@ if insurance:
 if dealerBlackJack:
 	print("Dealer Has BlackJack")
 	drawAsciiTable(table,showDealerCard=True)
-
 

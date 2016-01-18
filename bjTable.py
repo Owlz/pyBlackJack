@@ -54,3 +54,32 @@ class Table():
 			Dealer object for this table
 		"""
 		return self.dealer
+	
+	def clearBets(self):
+		"""
+		Input:
+			None
+		Action:
+			Clears wagers for all players at the table.
+		Returns:
+			Nothing
+		"""
+		
+		# Just loop through the players and clear their bets.	
+		for player in self.getPlayers():
+			player.clearBet()
+	
+	def placeBets(self):
+		"""
+		Input:
+			None
+		Action:
+			Gets wagers from players for their hands.
+			Actually just calls "placeBet" for each player at the table.
+		Returns:
+			Nothing
+		"""
+		
+		# Loop through the players and let the player object take care of bets
+		for player in self.getPlayers():
+			player.placeBet()
