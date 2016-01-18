@@ -117,7 +117,8 @@ def drawAsciiTable(table,showDealerCard=False):
 			heading += "\n" + "-"*len(heading)
 			print(heading)
 			h += 1
-			table.getPlayers()[0].getHand().pprint()
+			player.getHand().pprint()
+			print("Total: {0}".format(' or '.join([str(x) for x in player.getHand().getValue()])))
 	
 
 # Welcome banner
