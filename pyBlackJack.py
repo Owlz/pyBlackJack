@@ -114,7 +114,7 @@ player = Player(money=money,name=name)
 table.addPlayer(player)
 
 # Init our dealer
-dealer = Dealer(houseRules)
+dealer = Dealer(houseRules=houseRules,ui=ui)
 
 # Give the dealer a hand
 dealer.addHand()

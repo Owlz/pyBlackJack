@@ -1,11 +1,15 @@
 from bjShoe import Shoe
 from bjPlayer import Player
+from bjUI import UI
 
 class Dealer(Player):
 	"""
 	Class acts to abstract the things that a dealer would do
 	We're extending Player as Dealers are a subset of players
 	"""
+	
+	# Instantiate the UI
+	ui = UI()
 	
 	def asciiToBool(self,x):
 		"""
@@ -42,9 +46,11 @@ class Dealer(Player):
 		# Return the result
 		return num/den
 
-	def __init__(self, houseRules):
+	def __init__(self, houseRules, ui):
 		"""
-		houseRules = object of rules as returned by "selectHouseRules"
+		Input:
+			houseRules = object of rules as returned by "selectHouseRules"
+			UI = Active UI instantiation
 		"""
 		
 		self.numDecksPerShoe = int(houseRules["number_of_decks"],10)
@@ -73,6 +79,9 @@ class Dealer(Player):
 		
 		# Have we played our hand yet?
 		self.dealerTurn = False
+		
+		# Set the UI
+		self.ui = ui
 
 	def allowedHandActions(self,hand,player):
 		"""
@@ -170,26 +179,24 @@ class Dealer(Player):
 			Nothing
 		"""
 		
-		# Get valid actions for this hand
-		validActions = self.allowedHandActions(hand,player)
-		
-		# Get action from the player.
-		action = player.selectHandAction(player.getHands().index(hand),validActions)
-		
-		# Do the action
-		if action == "hit":
-			self.dealCardToHand(hand)
+		# Loop so long as we haven't busted
+		while not hand.isBusted():
+			# Get valid actions for this hand
+			validActions = self.allowedHandActions(hand,player)
 			
-			ui.draw(table)
-			# Check for busted hand
-			if hand.isBusted():
-				print("Busted!")
-		
-		elif action == "stand":
-			return
-
-		else:
-			raise Exception("I haven't implemented {0} yet.".format(action))	
-		
-		print("I should be acting on this action here.... but i'm not yet")
+			# Get action from the player.
+			action = player.selectHandAction(player.getHands().index(hand),validActions)
+			
+			# We're hitting. Hit and let the loop take care of it
+			if action == "hit":
+				self.dealCardToHand(hand)
+				
+				self.ui.drawTable()
+			
+			# We're standing. Just return	
+			elif action == "stand":
+				return
+	
+			else:
+				raise Exception("I haven't implemented {0} yet.".format(action))	
 		

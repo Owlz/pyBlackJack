@@ -53,13 +53,19 @@ class UI():
 				heading += "\n" + "-"*len(heading)
 				print(heading)
 				h += 1
-				player.getHand().pprint()
-				print("Total: {0}".format(' or '.join([str(x) for x in player.getHand().getValue()])))
+				# Prettyprint it
+				hand.pprint()
+				if hand.isBlackJack():
+					print("BlackJack!")
+				elif not hand.isBusted():
+					print("Total: {0}".format(' or '.join([str(x) for x in player.getHand().getValue()])))
+				else:
+					print("Busted!")
 
-	def __init__(self,table,version="console"):
+	def __init__(self,table=None,version="console"):
 		"""
 		Input:
-			table == Table object that will be the focus of the UI
+			(optional) table == Table object that will be the focus of the UI
 			(optional) version == what type of UI to use. Defaults to console.
 		Action:
 			Setup UI to use the given type
