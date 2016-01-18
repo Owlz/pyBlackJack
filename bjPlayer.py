@@ -121,7 +121,7 @@ class Player:
 		"""
 		return self.hands
 
-	def clearBet(self):
+	def clearBets(self):
 		"""
 		Input:
 			None
@@ -132,7 +132,19 @@ class Player:
 		"""
 		# Easy.
 		self.bets = []
-		
+	
+	def clearHands(self):
+		"""
+		Input:
+			Nothing
+		Action:
+			Clears out all hands associated with player
+		Returns:
+			Nothing
+		"""
+		# Easy
+		self.hands = []
+	
 	def placeBet(self,amount=None):
 		"""
 		Input:

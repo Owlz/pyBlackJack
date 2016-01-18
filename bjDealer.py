@@ -1,6 +1,7 @@
 from bjShoe import Shoe
 from bjPlayer import Player
 from bjUI import UI
+from time import sleep
 
 class Dealer(Player):
 	"""
@@ -200,3 +201,118 @@ class Dealer(Player):
 			else:
 				raise Exception("I haven't implemented {0} yet.".format(action))	
 		
+	def playDealersHand(self,table):
+		"""
+		Input:
+			table = Table object that the dealer is at
+		Action:
+			Plays out the dealer's turn
+		Returns:
+			Nothing
+		"""
+		
+		# It's our turn now
+		self.dealerTurn = True
+		
+		# Show our cards
+		self.ui.drawTable()
+		
+		# See if we actually need to play
+		if table.getNumActiveHands() == 0:
+			# No reason to play further
+			return
+		
+		# Time to play our hand
+		hand = self.getHand()
+		
+		# Continue doing things so long as we havne't busted
+		while not hand.isBusted():
+			# Show our cards
+			self.ui.drawTable()
+			
+			# Pause between cards
+			sleep(1)
+			
+			# Remember, handValue initially is a list here
+			handValue = hand.getValue()
+			
+			# Convienience Checks
+			isHard = len(handValue) == 1
+			isSoft = not isHard
+			
+			# Solidify handValue to a single value
+			handValue = handValue[-1]
+			
+			###############
+			# Hard Values #
+			###############
+			if isHard:
+				
+				# Stand on 17 and above
+				if handValue >= 17:
+					return
+				
+				# Time to take another card
+				self.dealCardToHand(hand)
+				continue
+			
+			###############
+			# Soft Values #	
+			###############
+			else:
+				# Stand on 18+ for sure
+				# Also stand on 17 if it's in our rules
+				if handValue >= 18 or (handValue == 17 and not self.hitSoft17):
+					return
+				
+				# Otherwise hit
+				self.dealCardToHand(hand)
+				continue
+	
+	def payoutTable(self,table):
+		"""
+		Input:
+			table == Table object
+		Action:
+			Check dealer's score vs players score and pay or take money
+		Returns:
+			Nothing
+		"""
+		
+		# Get my own value
+		dealerHand = self.getHand()
+		dealerValue = dealerHand.getValue()
+		dealerBusted = dealerHand.isBusted()
+		if not dealerBusted:
+			# Pop the highest value we have
+			dealerValue = dealerValue[-1]
+		else:
+			# Changing value to 0 to make things simpler
+			dealerValue = 0
+		
+		# Loop through all players
+		for player in table.getPlayers():
+			playerBets = player.getBets()
+			
+			# All hands for the given player
+			for hand in player.getHands():
+				# If the player busted, there's actually nothing to do
+				# This is because the bet value is already removed when betting
+				# Table clean-up will take care of the rest
+				if hand.isBusted():
+					continue
+				
+				playerValue = hand.getValue()[-1]
+				# Get associated bet for hand
+				playerBet = playerBets[player.getHands().index(hand)]
+				
+				# If player did better than dealer
+				if playerValue > dealerValue:
+					player.addMoney(playerBet*2)
+					continue
+				
+				# If player did the same as dealer
+				elif playerValue == dealerValue:
+					player.addMoney(playerBet)
+				
+				# Implicitly handling the case where player did worse than dealer

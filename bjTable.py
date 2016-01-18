@@ -90,6 +90,7 @@ class Table():
 			None
 		Action:
 			Go through all players, allow each to play their hands in turn.
+			Includes playing the dealer's hand
 		Return:
 			Nothing
 		"""
@@ -100,3 +101,55 @@ class Table():
 			for hand in player.getHands():
 				# Call dealer method to handle it
 				self.getDealer().facilitatePlayerHand(player,hand)
+		
+		# Play the dealer's hand
+		self.getDealer().playDealersHand(self)
+		
+		
+	def getNumActiveHands(self):
+		"""
+		Input:
+			Nothing
+		Action:
+			Determine the number of active hands at the table
+		Returns:
+			Number of active hands at the table, as an integer value
+		"""
+		# TODO: I'm pretty sure I can make this faster with comprehensions or Map
+		
+		# Here's the count
+		numHands = 0
+		
+		# Get the players
+		for player in self.getPlayers():
+			# Get the hands
+			for hand in player.getHands():
+				if not hand.isBusted():
+					numHands += 1
+		
+		return numHands
+	
+	def reset(self):
+		"""
+		Input:
+			Nothing
+		Action:
+			Clears all player's bets and hands.
+			Creates blank hands for all players
+			Basically, gets the table ready for another round.
+		Returns:
+			Nothing
+		"""
+		
+		# Loop through all players
+		for player in self.getPlayers():
+			player.clearBets()
+			player.clearHands()
+			player.addHand()
+		
+		# Don't forget the dealer's hand
+		self.getDealer().clearHands()
+		self.getDealer().addHand()
+		
+		# Also, it's no longer the dealers turn!
+		self.getDealer().dealerTurn = False

@@ -125,22 +125,30 @@ table.addDealer(dealer)
 # Give the player a hand
 player.addHand()
 
-# Get the wager
-table.placeBets()
+while True:
+	# Get the wager
+	table.placeBets()
+	
+	# Deal to the table
+	insurance, dealerBlackJack = dealer.dealHandsToTable(table)
+	
+	ui.drawTable()
+	#drawAsciiTable(table,showDealerCard=False)
+	
+	if insurance:
+		print("Insurance?")
+	
+	if dealerBlackJack:
+		print("Dealer Has BlackJack")
+		ui.drawTable()
+	
+	#validActions = dealer.allowedHandActions(player.getHand(),player)
+	#player.selectHandAction(0,validActions)
+	table.playActiveHands()
+	
+	ui.drawTable()
+	
+	table.getDealer().payoutTable(table)
+	
+	table.reset()
 
-# Deal to the table
-insurance, dealerBlackJack = dealer.dealHandsToTable(table)
-
-ui.drawTable()
-#drawAsciiTable(table,showDealerCard=False)
-
-if insurance:
-	print("Insurance?")
-
-if dealerBlackJack:
-	print("Dealer Has BlackJack")
-	drawAsciiTable(table,showDealerCard=True)
-
-#validActions = dealer.allowedHandActions(player.getHand(),player)
-#player.selectHandAction(0,validActions)
-table.playActiveHands()

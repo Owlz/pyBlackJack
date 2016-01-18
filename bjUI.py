@@ -40,7 +40,16 @@ class UI():
 		print("Dealer's Hand")
 		print("-------------")
 		self.getTable().getDealer().getHand().pprint(isDealer=(not self.getTable().getDealer().dealerTurn))
-	
+		# Only show this info on the dealer's turn
+		if self.getTable().getDealer().dealerTurn:
+			hand = self.getTable().getDealer().getHand()
+			if hand.isBlackJack():
+				print("BlackJack!")
+			elif not hand.isBusted():
+				print("Total: {0}".format(' or '.join([str(x) for x in hand.getValue()])))
+			else:
+				print("Busted!")
+		
 		for player in self.getTable().getPlayers():
 			h = 1
 			print("")
