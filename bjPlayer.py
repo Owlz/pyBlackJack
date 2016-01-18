@@ -184,3 +184,37 @@ class Player:
 		"""
 		
 		return self.bets
+	
+	def selectHandAction(self,hand,validActions):
+		"""
+		Input:
+			hand == Hand index to ask for an action
+			validActions == Set of valid actions for this hand.
+				This is created through Dealer.allowedHandActions method
+		Action:
+			If this is a human user, ask for action
+			If this is a machine, use the appropriate method to get action
+		Returns:
+			Selected action
+		"""
+		
+		# If we're a human, ask for action
+		if self.isHuman():
+			# Dictionary of things we can do
+			# TODO: This is hackish
+			lookup = {"hit":"","stand":"","double":", [d]ouble","split":", s[p]lit","surrender":", su[r]render"}
+			print("Actions: [h]it, [s]tand" + ''.join([lookup[action] for action in validActions]))
+			action = input("What do you want to do?: ")
+		else:
+			raise Exception("Sorry, haven't implemented logic for automatic action")
+		
+		actionLookup = {"h":"hit","s":"stand","d":"double","p":"split","r":"surrender"}
+		
+		# Validate our action
+		action = actionLookup[action[0].lower()]
+		
+		if action not in validActions:
+			raise Exception("You selected an action that isn't allowed!")
+		
+		# Ok, we're good.
+		return action

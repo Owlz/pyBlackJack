@@ -140,3 +140,19 @@ class Hand:
 			return True
 		
 		return False
+	
+	def isBusted(self):
+		"""
+		Input:
+			Nothing
+		Action:
+			Check if this hand has busted.
+		Returns:
+			Boolean True if busted, False otherwise
+		"""
+		
+		# Just check if we have no more valid values
+		if len(self.getValue()) == 0:
+			return True
+		
+		return False

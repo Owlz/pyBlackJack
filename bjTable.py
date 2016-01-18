@@ -83,3 +83,20 @@ class Table():
 		# Loop through the players and let the player object take care of bets
 		for player in self.getPlayers():
 			player.placeBet()
+	
+	def playActiveHands(self):
+		"""
+		Input:
+			None
+		Action:
+			Go through all players, allow each to play their hands in turn.
+		Return:
+			Nothing
+		"""
+		
+		# Loop through players
+		for player in self.getPlayers():
+			# Loop through all their hands
+			for hand in player.getHands():
+				# Call dealer method to handle it
+				self.getDealer().facilitatePlayerHand(player,hand)

@@ -7,6 +7,7 @@ from bjDealer import Dealer
 from bjPlayer import Player
 from bjHand import Hand
 from bjTable import Table
+from bjUI import UI
 import os
 
 def clearScreen():
@@ -90,38 +91,11 @@ def selectHouseRules():
 
 	return ruleSets[list(ruleSets)[int(i,10)]]
 
-def drawAsciiTable(table,showDealerCard=False):
-	"""
-	Input:
-		table = Table object
-		showDealerCard = Should we show the dealer's whole hand
-	Action:
-		Draw out ASCII interface
-	Returns:
-		Nothing
-	"""
-	
-	clearScreen()
-	
-	print("Dealer's Hand")
-	print("-------------")
-	table.getDealer().getHand().pprint(isDealer=(not showDealerCard))
-	
-	for player in table.getPlayers():
-		h = 1
-		print("")
-		heading = "{0} (${1})".format(player.name,player.money)
-		heading += "\n" + "-"*len(heading)
-		print(heading)
-		for hand in player.getHands():
-			print("")
-			heading = "Hand {0} (${1})".format(h,player.getBets()[player.getHands().index(hand)])
-			heading += "\n" + "-"*len(heading)
-			print(heading)
-			h += 1
-			player.getHand().pprint()
-			print("Total: {0}".format(' or '.join([str(x) for x in player.getHand().getValue()])))
-	
+# Init the table
+table = Table()
+
+# Create UI
+ui = UI(table)
 
 # Welcome banner
 printBanner()
@@ -135,9 +109,6 @@ name = input("What's your name?: ")
 money = input("How much money to start with?: ")
 
 player = Player(money=money,name=name)
-
-# Init the table
-table = Table()
 
 # Add the player to the table
 table.addPlayer(player)
@@ -160,7 +131,8 @@ table.placeBets()
 # Deal to the table
 insurance, dealerBlackJack = dealer.dealHandsToTable(table)
 
-drawAsciiTable(table,showDealerCard=False)
+ui.drawTable()
+#drawAsciiTable(table,showDealerCard=False)
 
 if insurance:
 	print("Insurance?")
@@ -169,4 +141,6 @@ if dealerBlackJack:
 	print("Dealer Has BlackJack")
 	drawAsciiTable(table,showDealerCard=True)
 
-print(dealer.allowedHandActions(player.getHand(),player))
+#validActions = dealer.allowedHandActions(player.getHand(),player)
+#player.selectHandAction(0,validActions)
+table.playActiveHands()

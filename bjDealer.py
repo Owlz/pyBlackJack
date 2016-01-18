@@ -70,6 +70,9 @@ class Dealer(Player):
 		
 		# Give ourself a hands list
 		self.hands = []
+		
+		# Have we played our hand yet?
+		self.dealerTurn = False
 
 	def allowedHandActions(self,hand,player):
 		"""
@@ -152,3 +155,41 @@ class Dealer(Player):
 		# Check for dealer blackjack
 	
 		return insurance, self.getHand().isBlackJack()
+
+	
+	def facilitatePlayerHand(self,player,hand):
+		"""
+		Input:
+			player == Player object
+			hand == Hand object
+		Action:
+			Performs calls and logic necessary to carry out all player's actions.
+			Actual logic will be made either by the human player or simulation script.
+			Any player busts will be taken care of after all hands are played
+		Returns:
+			Nothing
+		"""
+		
+		# Get valid actions for this hand
+		validActions = self.allowedHandActions(hand,player)
+		
+		# Get action from the player.
+		action = player.selectHandAction(player.getHands().index(hand),validActions)
+		
+		# Do the action
+		if action == "hit":
+			self.dealCardToHand(hand)
+			
+			ui.draw(table)
+			# Check for busted hand
+			if hand.isBusted():
+				print("Busted!")
+		
+		elif action == "stand":
+			return
+
+		else:
+			raise Exception("I haven't implemented {0} yet.".format(action))	
+		
+		print("I should be acting on this action here.... but i'm not yet")
+		
