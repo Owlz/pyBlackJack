@@ -116,16 +116,13 @@ table.addPlayer(player)
 # Init our dealer
 dealer = Dealer(houseRules=houseRules,ui=ui)
 
-# Give the dealer a hand
-dealer.addHand()
-
 # Add him to the table
 table.addDealer(dealer)
 
-# Give the player a hand
-player.addHand()
-
 while True:
+	# Get the table ready
+	table.reset()
+	
 	# Get the wager
 	table.placeBets()
 	
@@ -138,9 +135,13 @@ while True:
 	if insurance:
 		print("Insurance?")
 	
+	# If the dealer has blackjack	
 	if dealerBlackJack:
 		print("Dealer Has BlackJack")
+		table.getDealer().payoutTable(table)
+		table.getDealer().dealerTurn = True
 		ui.drawTable()
+		continue
 	
 	#validActions = dealer.allowedHandActions(player.getHand(),player)
 	#player.selectHandAction(0,validActions)
@@ -149,6 +150,3 @@ while True:
 	ui.drawTable()
 	
 	table.getDealer().payoutTable(table)
-	
-	table.reset()
-
