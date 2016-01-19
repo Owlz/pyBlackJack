@@ -197,7 +197,24 @@ class Dealer(Player):
 			# We're standing. Just return	
 			elif action == "stand":
 				return
-	
+			
+			# Put more money down. Assuming checks have been done before this call
+			elif action == "double":
+				# Determine how much was already bet
+				bet = player.getBets()[player.getHands().index(hand)]
+				
+				# If doubling the bet would be more money than they have, throw exception
+				if bet > player.getMoney():
+					raise Exception("You're trying to bet more than you have.")
+
+				# If we get here, they have enough to cover the bet
+				# Move that money to their bet
+				player.addMoney(bet * -1)
+				player.getBets()[player.getHands().index(hand)] += bet
+				
+				# Give them one more card only
+				self.dealCardToHand(hand)
+				return	
 			else:
 				raise Exception("I haven't implemented {0} yet.".format(action))	
 		

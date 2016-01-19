@@ -165,7 +165,11 @@ class Player:
 			
 			# If the player is human
 			if self.isHuman():
-				amount = int(input("What's your wager: "),10)
+				amount = ""
+				# Keep asking for amount until we get a valid integer
+				while not amount.isdigit():
+					amount = input("What's your wager: ")
+				amount = int(amount,10)
 			
 			# Only other option is a machine
 			else:
@@ -216,7 +220,10 @@ class Player:
 			# TODO: This is hackish
 			lookup = {"hit":"","stand":"","double":", [d]ouble","split":", s[p]lit","surrender":", su[r]render"}
 			print("Actions: [h]it, [s]tand" + ''.join([lookup[action] for action in validActions]))
-			action = input("What do you want to do?: ")
+			action = ""
+			# Loop until valid input
+			while action.lower() not in ["h","s","d","p","r"]:
+				action = input("What do you want to do?: ")
 		else:
 			raise Exception("Sorry, haven't implemented logic for automatic action")
 		
