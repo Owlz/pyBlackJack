@@ -6,3 +6,5 @@ Testing
 
 Testing is done simply by running the following command from the root of the project:
 	py.test --cov=.
+
+
