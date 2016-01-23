@@ -128,3 +128,37 @@ def test_printCards():
 	h.printCards()
 	h.pprint(isDealer=False)
 	h.pprint(isDealer=True)
+
+def test_isBlackJack():
+	"""
+	Test the isBlackJack function
+	"""
+	
+	c1 = Card("A","Spade")
+	c2 = Card("J","Diamond")
+	
+	h = Hand(c1,c2)
+	
+	assert h.isBlackJack()
+	
+	c3 = Card("6","Spade")
+	h = Hand(c1,c3)
+	
+	assert not h.isBlackJack()
+
+def test_isBusted():
+	"""
+	Test the isBusted function
+	"""
+	
+	c1 = Card("5","Spade")
+	c2 = Card("7","Diamond")
+	
+	h = Hand(c1,c2)
+	
+	assert not h.isBusted()
+	
+	c3 = Card("Q","Club")
+	h.addCard(c3)
+	
+	assert h.isBusted()
