@@ -7,7 +7,7 @@ from bjStrategy_8deck_hitSoft17 import strategy
 
 
 if len(sys.argv) != 9:
-	print "Usage: " + sys.argv[0] + " <nDecks> <dealerUpCard> <userTotal> <# of simulations> <playerAction \"Hit\"/\"Stand\"> <hitSoft17: 0|1>i <isSoftTotal: 0|1> <oneHit: 0|1>\n"
+	print("Usage: " + sys.argv[0] + " <nDecks> <dealerUpCard> <userTotal> <# of simulations> <playerAction \"Hit\"/\"Stand\"> <hitSoft17: 0|1>i <isSoftTotal: 0|1> <oneHit: 0|1>\n")
 	exit(0)
 
 
@@ -41,7 +41,7 @@ oneHit = bool(int(sys.argv[8]))
 
 ###################
 
-print "Test case:\nNumber of Decks: {0}\nDealer up card: {1}\nUser Total: {2}\nNumber of test hands: {3}\nPlayer Action: {4}\nHitSoft17: {5}\nIsSoftTotal: {6}\nOne Hit: {7}\n".format(nDecks, dealerUpCard, userTotal, run, playerAction, hitSoft17, isSoftTotal, oneHit)
+print("Test case:\nNumber of Decks: {0}\nDealer up card: {1}\nUser Total: {2}\nNumber of test hands: {3}\nPlayer Action: {4}\nHitSoft17: {5}\nIsSoftTotal: {6}\nOne Hit: {7}\n".format(nDecks, dealerUpCard, userTotal, run, playerAction, hitSoft17, isSoftTotal, oneHit))
 
 def dealerPlay():
 	# Play the dealer's hand
@@ -181,4 +181,4 @@ while run > 0:
 	push += 1
 	continue
 
-print "Win: {0}\nLoss: {1}\nPush: {2}\nWinning Probability: {3}\n\n".format(win, loss, push, (win/(win+loss+push)))
+print("Win: {0}\nLoss: {1}\nPush: {2}\nWinning Probability: {3}\n\n".format(win, loss, push, (win/(win+loss+push))))

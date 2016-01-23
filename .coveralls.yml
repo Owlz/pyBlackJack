@@ -1,0 +1,2 @@
+service_name: Codeship
+parallel: false # if the CI is running your build in parallel

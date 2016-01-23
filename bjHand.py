@@ -121,7 +121,7 @@ class Hand:
 			lines[8] += ('└─────────┘ ')
 
 		
-		[print(line) for line in lines]
+		_ = [print(line) for line in lines]
 	
 	def isBlackJack(self):
 		"""

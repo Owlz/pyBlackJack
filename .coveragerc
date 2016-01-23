@@ -1,0 +1,6 @@
+[run]
+# Check coverage of branches
+branch = True
+omit = tests/*
+
+[report]
