@@ -26,11 +26,12 @@ class Dealer(Player):
 		# Return the result
 		return num/den
 
-	def __init__(self, houseRules, ui):
+	def __init__(self, houseRules, ui,dealCardDelay=1):
 		"""
 		Input:
 			houseRules = object of rules as returned by "selectHouseRules"
 			UI = Active UI instantiation
+			(optional) dealCardDelay = number of seconds to sleep between dealer dealing a card
 		"""
 		
 		self.numDecksPerShoe = int(houseRules["number_of_decks"],10)
@@ -62,6 +63,9 @@ class Dealer(Player):
 		
 		# Set the UI
 		self.ui = ui
+		
+		# Set our between card sleep timer
+		self.dealCardDelay = dealCardDelay
 
 	def allowedHandActions(self,hand,player):
 		"""
@@ -227,7 +231,7 @@ class Dealer(Player):
 			self.ui.drawTable()
 			
 			# Pause between cards
-			sleep(1)
+			sleep(self.dealCardDelay)
 			
 			# Remember, handValue initially is a list here
 			handValue = hand.getValue()

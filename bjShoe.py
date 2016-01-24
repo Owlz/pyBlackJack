@@ -45,7 +45,7 @@ class Shoe:
 		Deal a specific card (name, suit, or both).
 		This is helpful for creating scenarios to test
 		"""
-		# This algorithm kinda sucks...
+		# TODO: This algorithm kinda sucks...
 
 		cards = self.getCards()
 		

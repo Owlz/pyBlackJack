@@ -252,3 +252,250 @@ def test_facilitatePlayerHand(monkeypatch):
 	# We should be busted here
 	assert len(hand.getValue()) == 0
 
+def test_playDealersHand(monkeypatch):
+	"""
+	Test playDealersHand method
+	"""
+	# Create the table
+	table = Table()
+	
+	# Create the UI
+	ui = UI(table)
+
+	# Get our rule set
+	houseRules = ui.selectHouseRules("Mystic Lake -- Shakopee, MN")
+
+	# Set up the dealer (don't waste time between cards)
+	dealer = Dealer(houseRules=houseRules,ui=ui,dealCardDelay=0)
+	
+	# Patching UI call as we can test that separately	
+	monkeypatch.setattr(dealer.ui,"drawTable",lambda : None)
+	
+	# Set up the player
+	player = Player(money=100,name="Mike")
+	
+	############################
+	# No active hands at table #
+	############################
+	# Give the player a busted hand
+	hand = Hand(Card("10","Diamond"),Card("10","Spade"))
+	hand.addCard(Card("5","Spade"))
+	player.addHand(hand)
+	
+	# Give the dealer a hand
+	hand2 = Hand(Card("5","Spade"),Card("10","Club"))
+	dealer.addHand(hand2)
+	
+	# Setup table
+	table.addPlayer(player)
+	table.setDealer(dealer)
+	
+	# Play the dealer
+	dealer.playDealersHand(table)
+	
+	# We should not have gotten any cards
+	assert len(dealer.getHand().getCards()) == 2
+	
+	################
+	# Dealer Busts #
+	################
+	# Give the player a busted hand
+	player.clearHands()
+	hand = Hand(Card("10","Diamond"),Card("5","Spade"))
+	player.addHand(hand)
+	
+	# Give the dealer a hand
+	dealer.clearHands()
+	hand2 = Hand(Card("5","Spade"),Card("10","Club"))
+	dealer.addHand(hand2)
+	
+	# Make sure the next card busts him
+	dealer.shoe.cards[0] = Card("K","Club")
+	
+	dealer.playDealersHand(table)
+	
+	# Check that he busted
+	assert dealer.getHand().isBusted()
+	assert len(dealer.getHand().getCards()) == 3
+	
+	############################
+	# Dealer Stands on Hard 17 #
+	############################
+	# Give the player a busted hand
+	player.clearHands()
+	hand = Hand(Card("10","Diamond"),Card("5","Spade"))
+	player.addHand(hand)
+
+	# Give the dealer a hand
+	dealer.clearHands()
+	hand2 = Hand(Card("5","Spade"),Card("10","Club"))
+	dealer.addHand(hand2)
+
+	# Make sure the next card busts him
+	dealer.shoe.cards[0] = Card("2","Club")
+
+	dealer.playDealersHand(table)
+
+	# Check our results
+	assert not dealer.getHand().isBusted()
+	assert len(dealer.getHand().getCards()) == 3
+	assert dealer.getHand().getValue()[-1] == 17
+	
+	############################
+	# Dealer Stands on Soft 18 #
+	############################
+	# Give the player a busted hand
+	player.clearHands()
+	hand = Hand(Card("10","Diamond"),Card("5","Spade"))
+	player.addHand(hand)
+
+	# Give the dealer a hand
+	dealer.clearHands()
+	hand2 = Hand(Card("A","Spade"),Card("7","Club"))
+	dealer.addHand(hand2)
+
+	dealer.playDealersHand(table)
+
+	# Check our results
+	assert not dealer.getHand().isBusted()
+	assert len(dealer.getHand().getCards()) == 2
+	assert dealer.getHand().getValue()[-1] == 18
+
+	#################################
+	# Dealer Hits on Soft 16 and 17 #
+	#################################
+	# Give the player a busted hand
+	player.clearHands()
+	hand = Hand(Card("10","Diamond"),Card("5","Spade"))
+	player.addHand(hand)
+
+	# Give the dealer a hand
+	dealer.clearHands()
+	hand2 = Hand(Card("A","Spade"),Card("5","Club"))
+	dealer.addHand(hand2)
+
+	# Next two cards to be dealt
+	dealer.shoe.cards[0] = Card("A","Spade")
+	dealer.shoe.cards[1] = Card("K","Club")
+
+	dealer.playDealersHand(table)
+
+	# Check our results
+	assert not dealer.getHand().isBusted()
+	assert len(dealer.getHand().getCards()) == 4
+	assert dealer.getHand().getValue()[-1] == 17
+	
+	############################
+	# Dealer Stands on Soft 17 #
+	############################
+	# Get our rule set
+	houseRules = ui.selectHouseRules("Generic -- Liberal Two Deck")
+
+	# Set up the dealer (don't waste time between cards)
+	dealer = Dealer(houseRules=houseRules,ui=ui,dealCardDelay=0)
+
+	# Patching UI call as we can test that separately	
+	monkeypatch.setattr(dealer.ui,"drawTable",lambda : None)
+	
+	# Re-add the dealer
+	table.setDealer(dealer)
+
+	# Give the player a busted hand
+	player.clearHands()
+	hand = Hand(Card("10","Diamond"),Card("5","Spade"))
+	player.addHand(hand)
+
+	# Give the dealer a hand
+	dealer.clearHands()
+	hand2 = Hand(Card("A","Spade"),Card("6","Club"))
+	dealer.addHand(hand2)
+
+	dealer.playDealersHand(table)
+
+	# Check our results
+	assert not dealer.getHand().isBusted()
+	assert len(dealer.getHand().getCards()) == 2
+	assert dealer.getHand().getValue()[-1] == 17
+	assert len(dealer.getHand().getValue()) == 2
+
+def test_payoutTable():
+	"""
+	Testing payoutTable method
+	"""
+	
+	# Create the table
+	table = Table()
+
+	# Create the UI
+	ui = UI(table)
+
+	# Get our rule set
+	houseRules = ui.selectHouseRules("Mystic Lake -- Shakopee, MN")
+
+	# Set up the dealer (don't waste time between cards)
+	dealer = Dealer(houseRules=houseRules,ui=ui,dealCardDelay=0)
+
+	# Set up the player
+	player = Player(money=100,name="Bill")
+	player2 = Player(money=100,name="Dave")
+	
+	table.addPlayer(player)
+	table.addPlayer(player2)
+	table.setDealer(dealer)
+	
+	#########################################
+	# Dealer is busted / Player 2 is busted #
+	#########################################
+	# Bet
+	player.placeBet(5)
+	player2.placeBet(10)
+	
+	hand = Hand(Card("K","Spade"),Card("Q","Spade"))
+	hand.addCard(Card("5","Club"))
+	# He busted
+	player2.addHand(hand)
+	
+	# Player 1 hasn't busted
+	hand2 = Hand(Card("J","Spade"),Card("2","Club"))
+	player.addHand(hand2)
+	
+	# Dealer has busted
+	hand3 = Hand(Card("5","Diamond"),Card("7","Club"))
+	hand3.addCard(Card("10","Club"))
+	dealer.addHand(hand3)
+	
+	# Play it
+	dealer.payoutTable(table)
+	
+	# Test it
+	assert player.getMoney() == 105
+	assert player2.getMoney() == 90
+
+	###########################################
+	# Dealer Beats Player 1 / Pushes Player 2 #
+	###########################################
+	table.reset()
+	# Bet
+	player.placeBet(10)
+	player2.placeBet(20)
+
+	player.clearHands()
+	hand = Hand(Card("K","Spade"),Card("5","Spade"))
+	player.addHand(hand)
+
+	player2.clearHands()
+	hand2 = Hand(Card("J","Spade"),Card("8","Club"))
+	player2.addHand(hand2)
+
+	# Dealer has 18
+	dealer.clearHands()
+	hand3 = Hand(Card("8","Diamond"),Card("J","Club"))
+	dealer.addHand(hand3)
+
+	# Play it
+	dealer.payoutTable(table)
+
+	# Test it
+	assert player.getMoney() == 95
+	assert player2.getMoney() == 90
+
