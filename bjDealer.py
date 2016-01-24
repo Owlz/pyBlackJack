@@ -10,7 +10,7 @@ class Dealer(Player):
 	"""
 	
 	# Instantiate the UI
-	ui = UI()
+	#ui = UI()
 	
 	def asciiToBool(self,x):
 		"""

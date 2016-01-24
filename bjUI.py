@@ -1,12 +1,77 @@
 # Modularize the User Interface
 
 import os
+import configparser
+import string
 
 class UI():
 	"""
 	This class is used to modularize the user interface.
 	Initially, the focus is on console. However, planning to incorporate graphical later.
 	"""
+
+	def printHouseRules(self,houseRules):
+		"""
+		Input:
+			Rules object as defined from selectHouseRules call
+		Action:
+			Display the rules that are going to be in effect
+		Returns:
+			Nothing
+		"""
+
+		print("Number of decks per shoe:\t\t{0}".format(houseRules["number_of_decks"]))
+		print("Dealer hits soft 17?:\t\t\t{0}".format(houseRules["hit_soft_17"]))
+		print("Double allowed after split?:\t\t{0}".format(houseRules["double_after_split"]))
+		print("Double allowed on what types of hands?: {0}".format(houseRules["double_on"]))
+		print("Total number of hands allowed:\t\t{0}".format(houseRules["total_hands"]))
+		print("Can you re-split Aces?:\t\t\t{0}".format(houseRules["resplit_ace"]))
+		print("BlackJack pays:\t\t\t\t{0}".format(houseRules["blackjack_pays"]))
+		print("Penetration:\t\t\t\t{0}\n".format(houseRules["penetration"]))
+
+
+	def selectHouseRules(self,rulesName=None):
+		"""
+		Input:
+			(optional) rulesName = If you know going into it what rule set you want to use (i.e.: "Mystic Lake -- Shakopee, MN")
+		Action:
+			Prompt user to select rule set the house will use (when to hit/stand, allow splits, etc)
+			If rulesName specified, then just use that.
+		Retuns: 
+			Rule set dictionary object
+		"""
+		print("What rules would you like to play by? Type q to quit.")
+	
+		# Setup the config parser	
+		ruleSets = configparser.ConfigParser()
+	
+		# Read the rules
+		ruleSets.read('houseRules.ini')
+	
+		# If we happen to know already, just return it
+		if rulesName != None:
+			return ruleSets[rulesName]
+		
+		# Print the options
+		for ruleSet in ruleSets:
+			if ruleSet == "DEFAULT":
+				continue
+			print("{0:3}:  {1}".format(list(ruleSets).index(ruleSet),ruleSet))
+	
+		i = "x"
+		# Loop until we get good input	
+		while i not in string.digits and i not in ['Q','q']:
+	
+			# Get input
+			i = input("\nSelect RuleSet: ")
+	
+		# If we're quiting	
+		if i in ['Q','q']:
+			print('Bye!')
+			exit(0)
+	
+		return ruleSets[list(ruleSets)[int(i,10)]]
+
 	
 	def clearScreen(self):
 		"""
