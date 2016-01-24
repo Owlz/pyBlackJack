@@ -67,7 +67,7 @@ class Table():
 		
 		# Just loop through the players and clear their bets.	
 		for player in self.getPlayers():
-			player.clearBet()
+			player.clearBets()
 	
 	def placeBets(self):
 		"""
