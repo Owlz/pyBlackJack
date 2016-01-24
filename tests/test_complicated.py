@@ -62,4 +62,14 @@ def test_selectHandActionUser(monkeypatch):
 	action = player.selectHandAction(0,allowedActions)
 	assert action == "double"
 
-
+	# Test error
+	allowedActions.remove("split")
+	monkeypatch.setattr(builtins,"input",lambda _: "p")
+	with pytest.raises(Exception):
+		player.selectHandAction(0,allowedActions)
+	
+	# Test non-human
+	# TODO: Need to do this better. This is hackish
+	player.isInteractive = False
+	with pytest.raises(Exception):
+		player.selectHandAction(0,allowedActions)

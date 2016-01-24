@@ -112,6 +112,10 @@ def test_betting(monkeypatch):
 	# We have had 2 bets so far	
 	assert len(bets) == 2
 	
+	# Clear the bets
+	p.clearBets()
+	assert len(p.getBets()) == 0
+	
 	# Create a machine user
 	p = Player(money=100,strategy="bjStrategy_8deck_hitSoft17")
 	
