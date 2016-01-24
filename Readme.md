@@ -8,4 +8,3 @@ Testing is done simply by running the following command from the root of the pro
 	py.test --cov=.
 
 
-
