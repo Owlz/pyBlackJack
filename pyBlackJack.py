@@ -55,7 +55,7 @@ table.addPlayer(player)
 dealer = Dealer(houseRules=houseRules,ui=ui)
 
 # Add him to the table
-table.addDealer(dealer)
+table.setDealer(dealer)
 
 while True:
 	# Get the table ready

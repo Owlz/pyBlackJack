@@ -2,34 +2,13 @@ from bjShoe import Shoe
 from bjPlayer import Player
 from bjUI import UI
 from time import sleep
+from helpers import *
 
 class Dealer(Player):
 	"""
 	Class acts to abstract the things that a dealer would do
 	We're extending Player as Dealers are a subset of players
 	"""
-	
-	# Instantiate the UI
-	#ui = UI()
-	
-	def asciiToBool(self,x):
-		"""
-		Input:
-			String representation of boolean ("True","T","False","F","0","1")
-		Action:
-			Converts ascii of True/False into bool
-		Returns:
-			Converted string as boolean value
-		"""
-		
-		x = x.lower()	
-		
-		if x in ["true","t","1"]:
-			return True
-		elif x in ["false","f","0"]:
-			return False
-		else:
-			raise Exception("Input to asciiToBool unknown conversion: {0}".format(x))
 	
 	def blackJackPaysToInt(self,x):
 		"""
@@ -56,16 +35,16 @@ class Dealer(Player):
 		
 		self.numDecksPerShoe = int(houseRules["number_of_decks"],10)
 		
-		self.hitSoft17 = self.asciiToBool(houseRules["hit_soft_17"])
+		self.hitSoft17 = asciiToBool(houseRules["hit_soft_17"])
 		
-		self.doubleAfterSplit = self.asciiToBool(houseRules["double_after_split"])
+		self.doubleAfterSplit = asciiToBool(houseRules["double_after_split"])
 		
 		# TODO: Not sure how to deal with this one. Probably need an enum.
 		self.doubleOn = houseRules["double_on"]
 		
 		self.totalHandsAllowed = int(houseRules["total_hands"],10)
 		
-		self.resplitAces = self.asciiToBool(houseRules["resplit_ace"])
+		self.resplitAces = asciiToBool(houseRules["resplit_ace"])
 		
 		self.blackJackPays = self.blackJackPaysToInt(houseRules["blackjack_pays"])
 		

@@ -14,8 +14,7 @@ from bjHand import Hand
 
 def test_selectHandActionUser(monkeypatch):
 	"""
-	Basically just an example of interaction in this game.
-	Should excersize much of the code.
+	Testing selecting a Hand's action
 	"""
 	
 	# Create the player

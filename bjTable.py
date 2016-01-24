@@ -32,12 +32,12 @@ class Table():
 		"""
 		return self.players
 	
-	def addDealer(self,dealer):
+	def setDealer(self,dealer):
 		"""
 		Input:
 			dealer = Dealer object
 		Action:
-			Adds dealer to the table
+			Sets dealer to the table
 		Returns:
 			Nothing
 		"""
