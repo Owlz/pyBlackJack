@@ -135,3 +135,120 @@ def test_dealCardsToTable():
 		if set(cases.values()) == {True}:
 			break
 
+def test_facilitatePlayerHand(monkeypatch):
+	"""
+	Test facilitatePlayerHand method
+	"""
+	# Create the UI
+	ui = UI()
+
+	# Get our rule set
+	houseRules = ui.selectHouseRules("Mystic Lake -- Shakopee, MN")
+
+	# Set up the dealer
+	dealer = Dealer(houseRules=houseRules,ui=ui)
+	
+	#############
+	# Hit/Stand #
+	#############
+	
+	player = Player(money=100,name="Tim")
+	hand = Hand(Card("2","Club"),Card("4","Club"))
+	player.addHand(hand)
+	
+	# A little complicated player interaction here..
+	def playerAction(x,y):
+		global count
+		# Player will hit then stand
+		if count == 0:
+			count += 1
+			return "hit"
+		else:
+			return "stand"
+	global count
+	count = 0
+	monkeypatch.setattr(player,"selectHandAction",playerAction)
+	# Screw the UI here..
+	monkeypatch.setattr(dealer.ui,"drawTable",lambda : None )
+	
+	dealer.facilitatePlayerHand(player,hand)
+	
+	# We should have 3 cards at this time
+	assert len(hand.getCards()) == 3
+	
+	##########
+	# Double #
+	##########
+	
+	player = Player(money=100,name="Tim")
+	hand = Hand(Card("2","Club"),Card("4","Club"))
+	player.addHand(hand)
+	
+	# Double will need a bet
+	player.placeBet(20)
+	
+	monkeypatch.setattr(player,"selectHandAction",lambda x,y : "double")
+	
+	dealer.facilitatePlayerHand(player,hand)
+
+	# We should have 3 cards at this time
+	assert len(hand.getCards()) == 3
+	
+	###########################
+	# Double not enough money #
+	###########################
+
+	player = Player(money=100,name="Tim")
+	hand = Hand(Card("2","Club"),Card("4","Club"))
+	player.addHand(hand)
+
+	# Double will need a bet
+	player.placeBet(60)
+
+	monkeypatch.setattr(player,"selectHandAction",lambda x,y : "double")
+	
+	with pytest.raises(Exception):
+		dealer.facilitatePlayerHand(player,hand)
+
+	# We should have 2 cards at this time
+	assert len(hand.getCards()) == 2
+
+	
+	#######################
+	# Split Unimplemented #
+	#######################
+
+	player = Player(money=100,name="Tim")
+	hand = Hand(Card("A","Club"),Card("A","Spade"))
+	player.addHand(hand)
+
+	# Double will need a bet
+	player.placeBet(40)
+
+	monkeypatch.setattr(player,"selectHandAction",lambda x,y : "split")
+
+	with pytest.raises(Exception):
+		dealer.facilitatePlayerHand(player,hand)
+
+	# We should have 2 cards at this time
+	assert len(hand.getCards()) == 2
+
+	###############
+	# Busted Hand #
+	###############
+
+	player = Player(money=100,name="Tim")
+	hand = Hand(Card("A","Club"),Card("K","Spade"))
+	hand.addCard(Card("Q","Spade"))
+	player.addHand(hand)
+
+	# Double will need a bet
+	player.placeBet(40)
+
+	monkeypatch.setattr(player,"selectHandAction",lambda x,y : "hit")
+
+	dealer.facilitatePlayerHand(player,hand)
+
+	# We should be busted here
+	assert len(hand.getValue()) == 0
+
