@@ -37,3 +37,17 @@ from bjDealer import Dealer
 	table.addPlayer(player2)
 	table.setDealer(dealer)
 """
+
+def test_asciiToBool():
+    """
+    Simple asciiToBool method test
+    """
+    assert asciiToBool("t")
+    assert asciiToBool("T")
+    assert asciiToBool("1")
+    assert asciiToBool("true")
+    assert not asciiToBool("false")
+    assert not asciiToBool("f")
+    assert not asciiToBool("0")
+    with pytest.raises(Exception):
+        asciiToBool("blergy")
